@@ -7,14 +7,28 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - run: cd brz-blog && npm ci
-      - run: npm run build
-      - uses: peaceiris/actions-gh-pages@v3
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: 'brz-blog/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: brz-blog
+        run: npm ci
+      
+      - name: Build
+        working-directory: brz-blog
+        run: npm run build
+      
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: brz-blog/docs/.vitepress/dist
+          publish_dir: ./brz-blog/docs/.vitepress/dist
+          commit_message: "Deploy VitePress site to Pages"
+          force: true
