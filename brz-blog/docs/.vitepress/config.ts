@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
 	// 网站标题
   title: "我的技术博客",
+  base: '/brz-blog/',
   // 网站描述
   description: "一个基于VitePress的技术文档博客",
   // 主题相关配置
